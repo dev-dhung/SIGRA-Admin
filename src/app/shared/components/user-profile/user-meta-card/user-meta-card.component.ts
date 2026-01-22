@@ -25,25 +25,25 @@ export class UserMetaCardComponent {
 
   // Example user data (could be made dynamic)
   user = {
-    firstName: 'Musharof',
-    lastName: 'Chowdhury',
-    role: 'Team Manager',
-    location: 'Arizona, United States',
+    firstName: 'Administrador',
+    lastName: 'SIGRA',
+    role: 'Administrador',
+    location: 'Caracas, Venezuela',
     avatar: '/images/user/owner.jpg',
     social: {
-      facebook: 'https://www.facebook.com/PimjoHQ',
-      x: 'https://x.com/PimjoHQ',
-      linkedin: 'https://www.linkedin.com/company/pimjo',
-      instagram: 'https://instagram.com/PimjoHQ',
+      facebook: '#',
+      x: '#',
+      linkedin: '#',
+      instagram: '#',
     },
-    email: 'randomuser@pimjo.com',
-    phone: '+09 363 398 46',
-    bio: 'Team Manager',
+    email: 'info@gmail.com',
+    phone: '+58 412 328 87 76',
+    bio: 'Administrador',
   };
 
   handleSave() {
     // Handle save logic here
-    console.log('Saving changes...');
+    // console.log('Guardando cambios...');
     this.modal.closeModal();
   }
 }
