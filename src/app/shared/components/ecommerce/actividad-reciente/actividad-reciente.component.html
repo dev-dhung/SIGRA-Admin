@@ -1,0 +1,34 @@
+<div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] sm:p-6">
+  <div class="mb-4 flex items-center justify-between">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800 dark:text-white/90">Actividad reciente</h3>
+      <p class="mt-1 text-theme-sm text-gray-500 dark:text-gray-400">Sesiones y reportes de los propietarios</p>
+    </div>
+    <a routerLink="/actividad"
+      class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+      Ver todo
+    </a>
+  </div>
+
+  <div class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+    @for (item of items; track $index) {
+      <div class="flex items-center gap-4 py-3">
+        <div class="h-10 w-10 shrink-0 overflow-hidden rounded-full">
+          <img [src]="item.avatar" [alt]="item.nombre" width="40" height="40" />
+        </div>
+        <div class="min-w-0 flex-1">
+          <p class="truncate text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ item.nombre }}</p>
+          <p class="truncate text-theme-xs text-gray-500 dark:text-gray-400">
+            {{ item.apartamento }} · {{ item.texto }}
+          </p>
+        </div>
+        <div class="flex flex-col items-end gap-1">
+          <app-badge size="sm" [color]="item.color">{{ item.badge }}</app-badge>
+          <span class="text-theme-xs text-gray-400">{{ item.fecha }}{{ item.hora ? ' ' + item.hora : '' }}</span>
+        </div>
+      </div>
+    } @empty {
+      <p class="py-8 text-center text-theme-sm text-gray-500 dark:text-gray-400">Sin actividad registrada</p>
+    }
+  </div>
+</div>

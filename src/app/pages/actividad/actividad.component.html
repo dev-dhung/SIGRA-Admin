@@ -1,0 +1,368 @@
+<app-page-breadcrumb pageTitle="Actividad de propietarios" />
+
+<div class="space-y-6">
+  <!-- Tarjetas resumen -->
+  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span class="text-theme-xs text-gray-500 dark:text-gray-400">Sesiones hoy</span>
+      <h4 class="mt-2 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ resumen.sesionesHoy }}</h4>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span class="text-theme-xs text-gray-500 dark:text-gray-400">Reportes abiertos</span>
+      <h4 class="mt-2 text-2xl font-semibold text-gray-800 dark:text-white/90">{{ resumen.reportesAbiertos }}</h4>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span class="text-theme-xs text-gray-500 dark:text-gray-400">Solventes</span>
+      <h4 class="mt-2 text-2xl font-semibold text-success-600 dark:text-success-500">{{ resumen.solventes }}</h4>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span class="text-theme-xs text-gray-500 dark:text-gray-400">Por vencer</span>
+      <h4 class="mt-2 text-2xl font-semibold text-warning-600 dark:text-orange-400">{{ resumen.porVencer }}</h4>
+    </div>
+    <div class="rounded-2xl border border-gray-200 bg-white p-5 dark:border-white/[0.05] dark:bg-white/[0.03]">
+      <span class="text-theme-xs text-gray-500 dark:text-gray-400">Vencidos</span>
+      <h4 class="mt-2 text-2xl font-semibold text-error-600 dark:text-error-500">{{ resumen.vencidos }}</h4>
+    </div>
+  </div>
+
+  <app-component-card title="Registros">
+    <!-- Toolbar: tabs + buscador + acciones -->
+    <div class="mb-4 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          (click)="cambiarTab('sesiones')"
+          [class]="tabActiva === 'sesiones'
+            ? 'rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white'
+            : 'rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300'">
+          Inicio / Cierre de sesión
+        </button>
+        <button
+          type="button"
+          (click)="cambiarTab('reportes')"
+          [class]="tabActiva === 'reportes'
+            ? 'rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white'
+            : 'rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300'">
+          Reportes
+        </button>
+        <button
+          type="button"
+          (click)="cambiarTab('pagos')"
+          [class]="tabActiva === 'pagos'
+            ? 'rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white'
+            : 'rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300'">
+          Solvencia / Pagos
+        </button>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <input
+          type="text"
+          [(ngModel)]="filtroBusqueda"
+          placeholder="Buscar..."
+          class="w-full rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm text-gray-700 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none sm:w-64 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300 dark:placeholder:text-gray-500"
+        />
+
+        @if (tabActiva === 'sesiones') {
+          <button type="button" (click)="abrirModalSesion()"
+            class="rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white hover:bg-brand-600">
+            + Registrar sesión
+          </button>
+        }
+        @if (tabActiva === 'reportes') {
+          <button type="button" (click)="abrirModalReporte()"
+            class="rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white hover:bg-brand-600">
+            + Nuevo reporte
+          </button>
+        }
+
+        <button type="button" (click)="exportarCSV()"
+          class="rounded-lg border border-gray-300 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.1] dark:bg-white/[0.03] dark:text-gray-300 dark:hover:bg-white/[0.05]">
+          CSV
+        </button>
+        <button type="button" (click)="exportarExcel()"
+          class="rounded-lg border border-success-500 bg-white px-4 py-2 text-theme-sm font-medium text-success-600 hover:bg-success-50 dark:bg-white/[0.03] dark:hover:bg-success-500/10">
+          Excel
+        </button>
+        <button type="button" (click)="exportarPDF()"
+          class="rounded-lg border border-error-500 bg-white px-4 py-2 text-theme-sm font-medium text-error-600 hover:bg-error-50 dark:bg-white/[0.03] dark:hover:bg-error-500/10">
+          PDF
+        </button>
+        <button type="button" (click)="resetearDatos()"
+          title="Restablecer datos demo"
+          class="rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm font-medium text-gray-500 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-400">
+          ↺
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabla: Sesiones -->
+    @if (tabActiva === 'sesiones') {
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div class="max-w-full overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+              <tr>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Propietario</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Tipo</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Fecha</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Hora</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Dispositivo</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">IP</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              @for (s of sesionesFiltradas; track s.id) {
+                <tr>
+                  <td class="px-5 py-4 sm:px-6 text-start">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 overflow-hidden rounded-full">
+                        <img [src]="s.propietario.avatar" [alt]="s.propietario.nombre" width="40" height="40" />
+                      </div>
+                      <div>
+                        <span class="block text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ s.propietario.nombre }}</span>
+                        <span class="block text-theme-xs text-gray-500 dark:text-gray-400">{{ s.propietario.apartamento }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-start">
+                    <app-badge size="sm" [color]="colorSesion(s.tipo)">{{ s.tipo }}</app-badge>
+                  </td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ s.fecha }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ s.hora }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ s.dispositivo }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ s.ip }}</td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="px-5 py-8 text-center text-theme-sm text-gray-500 dark:text-gray-400">Sin resultados</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Tabla: Reportes -->
+    @if (tabActiva === 'reportes') {
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div class="max-w-full overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+              <tr>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Propietario</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Reporte</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Categoría</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Fecha</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Estado</th>
+                <th class="px-5 py-3 text-end text-theme-xs font-medium text-gray-500 dark:text-gray-400">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              @for (r of reportesFiltrados; track r.id) {
+                <tr>
+                  <td class="px-5 py-4 sm:px-6 text-start">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 overflow-hidden rounded-full">
+                        <img [src]="r.propietario.avatar" [alt]="r.propietario.nombre" width="40" height="40" />
+                      </div>
+                      <div>
+                        <span class="block text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ r.propietario.nombre }}</span>
+                        <span class="block text-theme-xs text-gray-500 dark:text-gray-400">{{ r.propietario.apartamento }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-700 dark:text-gray-300">{{ r.titulo }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ r.categoria }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ r.fecha }}</td>
+                  <td class="px-4 py-3 text-start">
+                    <app-badge size="sm" [color]="colorReporte(r.estado)">{{ r.estado }}</app-badge>
+                  </td>
+                  <td class="px-4 py-3 text-end">
+                    <div class="flex justify-end gap-1">
+                      @if (r.estado !== 'En revisión' && r.estado !== 'Resuelto') {
+                        <button type="button" (click)="cambiarEstadoReporte(r.id, 'En revisión')"
+                          class="rounded-md border border-blue-light-200 bg-white px-2 py-1 text-theme-xs text-blue-light-600 hover:bg-blue-light-50 dark:bg-white/[0.03] dark:border-blue-light-500/30">
+                          Revisar
+                        </button>
+                      }
+                      @if (r.estado !== 'Resuelto') {
+                        <button type="button" (click)="cambiarEstadoReporte(r.id, 'Resuelto')"
+                          class="rounded-md border border-success-200 bg-white px-2 py-1 text-theme-xs text-success-600 hover:bg-success-50 dark:bg-white/[0.03] dark:border-success-500/30">
+                          Resolver
+                        </button>
+                      }
+                      @if (r.estado === 'Resuelto') {
+                        <button type="button" (click)="cambiarEstadoReporte(r.id, 'Pendiente')"
+                          class="rounded-md border border-gray-200 bg-white px-2 py-1 text-theme-xs text-gray-500 hover:bg-gray-50 dark:bg-white/[0.03] dark:border-white/[0.05]">
+                          Reabrir
+                        </button>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="6" class="px-5 py-8 text-center text-theme-sm text-gray-500 dark:text-gray-400">Sin resultados</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Tabla: Pagos / Solvencia -->
+    @if (tabActiva === 'pagos') {
+      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
+        <div class="max-w-full overflow-x-auto">
+          <table class="min-w-full">
+            <thead class="border-b border-gray-100 dark:border-white/[0.05]">
+              <tr>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Propietario</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Estado</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Último pago</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Próximo vencimiento</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Plazo</th>
+                <th class="px-5 py-3 text-start text-theme-xs font-medium text-gray-500 dark:text-gray-400">Monto</th>
+                <th class="px-5 py-3 text-end text-theme-xs font-medium text-gray-500 dark:text-gray-400">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-white/[0.05]">
+              @for (p of pagosFiltrados; track p.id) {
+                <tr>
+                  <td class="px-5 py-4 sm:px-6 text-start">
+                    <div class="flex items-center gap-3">
+                      <div class="h-10 w-10 overflow-hidden rounded-full">
+                        <img [src]="p.propietario.avatar" [alt]="p.propietario.nombre" width="40" height="40" />
+                      </div>
+                      <div>
+                        <span class="block text-theme-sm font-medium text-gray-800 dark:text-white/90">{{ p.propietario.nombre }}</span>
+                        <span class="block text-theme-xs text-gray-500 dark:text-gray-400">{{ p.propietario.apartamento }}</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-start">
+                    <app-badge size="sm" [color]="colorPago(p.estado)">{{ p.estado }}</app-badge>
+                  </td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ p.ultimoPago }}</td>
+                  <td class="px-4 py-3 text-theme-sm text-gray-500 dark:text-gray-400">{{ p.proximoVencimiento }}</td>
+                  <td class="px-4 py-3 text-theme-sm"
+                      [class.text-error-600]="p.diasRestantes < 0"
+                      [class.text-warning-600]="p.diasRestantes >= 0 && p.diasRestantes <= 5"
+                      [class.text-gray-500]="p.diasRestantes > 5"
+                      [class.dark:text-gray-400]="p.diasRestantes > 5">
+                    {{ textoDiasRestantes(p.diasRestantes) }}
+                  </td>
+                  <td class="px-4 py-3 text-theme-sm font-medium text-gray-700 dark:text-gray-300">{{ p.monto }}</td>
+                  <td class="px-4 py-3 text-end">
+                    @if (p.estado !== 'Solvente') {
+                      <button type="button" (click)="registrarPagoRecibido(p.id)"
+                        class="rounded-md border border-success-200 bg-white px-2 py-1 text-theme-xs text-success-600 hover:bg-success-50 dark:bg-white/[0.03] dark:border-success-500/30">
+                        Registrar pago
+                      </button>
+                    } @else {
+                      <span class="text-theme-xs text-gray-400">—</span>
+                    }
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" class="px-5 py-8 text-center text-theme-sm text-gray-500 dark:text-gray-400">Sin resultados</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+  </app-component-card>
+</div>
+
+<!-- Modal: Registrar sesión -->
+@if (modalSesionAbierto) {
+  <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/50 p-4" (click)="cerrarModalSesion()">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-gray-900" (click)="$event.stopPropagation()">
+      <h3 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white/90">Registrar sesión</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Propietario</label>
+          <select [(ngModel)]="formSesion.propietarioKey"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+            @for (p of propietarios; track keyDe(p)) {
+              <option [value]="keyDe(p)">{{ p.nombre }} — {{ p.apartamento }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Tipo</label>
+          <select [(ngModel)]="formSesion.tipo"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+            <option value="Inicio de sesión">Inicio de sesión</option>
+            <option value="Cierre de sesión">Cierre de sesión</option>
+          </select>
+        </div>
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Dispositivo</label>
+          <input [(ngModel)]="formSesion.dispositivo" type="text"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300" />
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end gap-2">
+        <button type="button" (click)="cerrarModalSesion()"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+          Cancelar
+        </button>
+        <button type="button" (click)="guardarSesion()"
+          class="rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white hover:bg-brand-600">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal: Nuevo reporte -->
+@if (modalReporteAbierto) {
+  <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-gray-900/50 p-4" (click)="cerrarModalReporte()">
+    <div class="w-full max-w-md rounded-2xl bg-white p-6 dark:bg-gray-900" (click)="$event.stopPropagation()">
+      <h3 class="mb-4 text-lg font-semibold text-gray-800 dark:text-white/90">Nuevo reporte</h3>
+      <div class="space-y-4">
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Propietario</label>
+          <select [(ngModel)]="formReporte.propietarioKey"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+            @for (p of propietarios; track keyDe(p)) {
+              <option [value]="keyDe(p)">{{ p.nombre }} — {{ p.apartamento }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Título del reporte</label>
+          <input [(ngModel)]="formReporte.titulo" type="text" placeholder="Describe brevemente el reporte"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300" />
+        </div>
+        <div>
+          <label class="mb-1 block text-theme-sm text-gray-700 dark:text-gray-300">Categoría</label>
+          <select [(ngModel)]="formReporte.categoria"
+            class="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-theme-sm text-gray-700 focus:border-brand-500 focus:outline-none dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+            @for (c of categorias; track c) {
+              <option [value]="c">{{ c }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end gap-2">
+        <button type="button" (click)="cerrarModalReporte()"
+          class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-theme-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-white/[0.05] dark:bg-white/[0.03] dark:text-gray-300">
+          Cancelar
+        </button>
+        <button type="button" (click)="guardarReporte()" [disabled]="!formReporte.titulo.trim()"
+          class="rounded-lg bg-brand-500 px-4 py-2 text-theme-sm font-medium text-white hover:bg-brand-600 disabled:opacity-50">
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+}

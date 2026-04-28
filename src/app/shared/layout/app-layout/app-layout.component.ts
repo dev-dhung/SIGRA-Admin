@@ -3,8 +3,9 @@ import { SidebarService } from '../../services/sidebar.service';
 import { CommonModule } from '@angular/common';
 import { AppSidebarComponent } from '../app-sidebar/app-sidebar.component';
 import { BackdropComponent } from '../backdrop/backdrop.component';
-import { RouterModule } from '@angular/router';
+import { ChildrenOutletContexts, RouterModule } from '@angular/router';
 import { AppHeaderComponent } from '../app-header/app-header.component';
+import { animate, query, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-layout',
@@ -16,6 +17,16 @@ import { AppHeaderComponent } from '../app-header/app-header.component';
     BackdropComponent
   ],
   templateUrl: './app-layout.component.html',
+  animations: [
+    trigger('routeFade', [
+      transition('* <=> *', [
+        query(':enter', [
+          style({ opacity: 0, transform: 'translateY(8px)' }),
+          animate('220ms ease-out', style({ opacity: 1, transform: 'translateY(0)' })),
+        ], { optional: true }),
+      ]),
+    ]),
+  ],
 })
 
 export class AppLayoutComponent {
@@ -23,10 +34,17 @@ export class AppLayoutComponent {
   readonly isHovered$;
   readonly isMobileOpen$;
 
-  constructor(public sidebarService: SidebarService) {
+  constructor(
+    public sidebarService: SidebarService,
+    private contexts: ChildrenOutletContexts,
+  ) {
     this.isExpanded$ = this.sidebarService.isExpanded$;
     this.isHovered$ = this.sidebarService.isHovered$;
     this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
+  }
+
+  getRouteAnimation() {
+    return this.contexts.getContext('primary')?.route?.snapshot?.url.join('/') || 'root';
   }
 
   get containerClasses() {
