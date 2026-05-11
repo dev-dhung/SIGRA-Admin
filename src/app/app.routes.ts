@@ -35,7 +35,7 @@ export const routes: Routes = [
       {
         path:'calendar',
         component:CalenderComponent,
-        title:'Angular Calender | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Calender | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'actividad',
@@ -45,68 +45,68 @@ export const routes: Routes = [
       {
         path:'profile',
         component:ProfileComponent,
-        title:'Angular Profile Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Profile Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'form-elements',
         component:FormElementsComponent,
-        title:'Angular Form Elements Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Form Elements Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'basic-tables',
         component:BasicTablesComponent,
-        title:'Angular Basic Tables Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Basic Tables Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'blank',
         component:BlankComponent,
-        title:'Angular Blank Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Blank Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       // support tickets
       {
         path:'invoice',
         component:InvoicesComponent,
-        title:'Angular Invoice Details Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Invoice Details Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'line-chart',
         component:LineChartComponent,
-        title:'Angular Line Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Line Chart Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'bar-chart',
         component:BarChartComponent,
-        title:'Angular Bar Chart Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Bar Chart Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'alerts',
         component:AlertsComponent,
-        title:'Angular Alerts Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Alerts Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'avatars',
         component:AvatarElementComponent,
-        title:'Angular Avatars Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Avatars Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'badge',
         component:BadgesComponent,
-        title:'Angular Badges Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Badges Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'buttons',
         component:ButtonsComponent,
-        title:'Angular Buttons Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Buttons Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'images',
         component:ImagesComponent,
-        title:'Angular Images Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Images Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
       {
         path:'videos',
         component:VideosComponent,
-        title:'Angular Videos Dashboard | TailAdmin - Angular Admin Dashboard Template'
+        title:'Angular Videos Dashboard | SIGRA - Angular Admin Dashboard Template'
       },
     ]
   },
@@ -114,17 +114,17 @@ export const routes: Routes = [
   {
     path:'signin',
     component:SignInComponent,
-    title:'Angular Sign In Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular Sign In Dashboard | SIGRA - Angular Admin Dashboard Template'
   },
   {
     path:'signup',
     component:SignUpComponent,
-    title:'Angular Sign Up Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular Sign Up Dashboard | SIGRA - Angular Admin Dashboard Template'
   },
   // error pages
   {
     path:'**',
     component:NotFoundComponent,
-    title:'Angular NotFound Dashboard | TailAdmin - Angular Admin Dashboard Template'
+    title:'Angular NotFound Dashboard | SIGRA - Angular Admin Dashboard Template'
   },
 ];
